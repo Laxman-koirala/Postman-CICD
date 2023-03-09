@@ -13,7 +13,7 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"console.clear()"
+							""
 						],
 						"type": "text/javascript"
 					}
