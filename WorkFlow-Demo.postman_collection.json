@@ -8,20 +8,98 @@
 	"item": [
 		{
 			"name": "Get User",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.clear()"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", ()=> {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const response = pm.response.json();",
+							"console.log(response.data[0].email);",
+							"",
+							"pm.test(\"Status code name has string\", function () {",
+							"    pm.response.to.have.status(\"OK\");",
+							"});",
+							"pm.test(\"assert email field\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(response.data[0].email).to.eql('michael.lawson@reqres.in');",
+							"});",
+							"",
+							"pm.test(\"Check email type\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(response.data[0].first_name).to.be.an('String');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/users?page=2",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "post user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Does post response is same as request\", function () {",
+							"    pm.expect(jsonData.name).to.eql('morpheus');",
+							"    pm.expect(jsonData.job).to.eql('leader');",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"morpheus\",\n    \"job\": \"leader\"\n}",
+					"raw": "{\n    \"name\": \"morpheus\",\n    \"job\": \"leader\"\n}\n\n",
 					"options": {
 						"raw": {
 							"language": "json"
